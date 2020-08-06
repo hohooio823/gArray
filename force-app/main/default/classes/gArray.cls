@@ -9,7 +9,7 @@ public with sharing class gArray {
     }
     public List<Object> first(List<Object> arr,Integer n) {
         if(arr!=null && n!=null){
-            if(n<=arr.size()){
+            if(n>0&&n<=arr.size()){
                 List<Object> newArr = new List<Object>();
                 for(Integer i=0;i<n;i++){
                     newArr.add(arr[i]);
@@ -25,11 +25,13 @@ public with sharing class gArray {
     }
     public List<Object> initial(List<Object> arr,Integer n) {
         if(arr!=null&&n!=null){
-            List<Object> newArr = new List<Object>();
-            for(Integer i=0;i<arr.size()-n;i++){
-                newArr.add(arr[i]);
-             }
-            return newArr;
+            if(n>0&&n<=arr.size()){
+                List<Object> newArr = new List<Object>();
+                for(Integer i=0;i<arr.size()-n;i++){
+                    newArr.add(arr[i]);
+                }
+                return newArr;
+            }else{return null;}
         }else{return null;}
     }
     public Object last(List<Object> arr) {
@@ -37,7 +39,7 @@ public with sharing class gArray {
     }
     public List<Object> last(List<Object> arr,Integer n) {
         if(arr!=null&&n!=null){
-            if(n!=0){
+            if(n>0&&n<=arr.size()){
                 List<Object> newArr = new List<Object>();
                 for(Integer i=arr.size()-n;i<arr.size();i++){
                     newArr.add(arr[i]);
@@ -47,17 +49,11 @@ public with sharing class gArray {
         }else{return null;}
     }
     public List<Object> rest(List<Object> arr) {
-        if(arr!=null){
-          List<Object> newArr = new List<Object>();
-          for(Integer i=1;i<arr.size();i++){
-              newArr.add(arr[i]);
-          }
-          return newArr;  
-        }else{return null;}
+        return rest(arr,1);
     }
     public List<Object> rest(List<Object> arr,Integer n) {
         if(arr!=null&&n!=null){
-            if(n!=0){
+            if(n>0&&n<=arr.size()){
                 List<Object> newArr = new List<Object>();
                 for(Integer i=n;i<arr.size();i++){
                     newArr.add(arr[i]);
@@ -99,34 +95,26 @@ public with sharing class gArray {
             Set<Object> newSet = new Set<Object>();
             for(Integer i=0;i<tempArr.size();i++){
                 if(tempArr[i]!=null){
-                    for(Integer ic=0;ic<tempArr[i].size();ic++){
-                        if(newSet.size()==0){
-                            newSet.add(tempArr[i][ic]);
-                        }else{
-                            for(Integer ig=0;ig<newSet.size();ig++){
-                                if(!newSet.contains(tempArr[i][ic])){
-                                    if(ig==newSet.size()-1){
-                                        newSet.add(tempArr[i][ic]);
-                                    }
-                                }else{break;}
-                            }
-                        }
-                    }
+                    newSet.addAll(tempArr[i]);
                 }else{return null;}
             }
             return newSet;
         }else{return null;}
     }
     public Set<Object> intersection(List<List<Object>> tempArr) {
-        if(tempArr!=null){
-            Set<Object> newSet = new Set<Object>(tempArr[0]);
-            newSet.removeAll(without(new List<Object>(newSet),tempArr[1]));
-            if(tempArr.size()>2){
-                for(Integer ik=2;ik<tempArr.size();ik++){
-                	newSet.removeAll(without(new List<Object>(newSet),tempArr[ik]));    
-                }
-            }
-            return newSet;
+        if(tempArr!=null ){
+            if(tempArr.size()!=1){
+                if(tempArr.size()!=0){
+                    Set<Object> newSet = new Set<Object>(tempArr[0]);
+                    newSet.removeAll(without(new List<Object>(newSet),tempArr[1]));
+                    if(tempArr.size()>2){
+                        for(Integer ik=2;ik<tempArr.size();ik++){
+                            newSet.removeAll(without(new List<Object>(newSet),tempArr[ik]));    
+                        }
+                    }
+                    return newSet;
+                }else{return null;}
+            }else{return null;}
         }else{return null;}
     }
     public List<Object> uniq(List<Object> arr) {
@@ -264,8 +252,10 @@ public with sharing class gArray {
             List<Integer> newArr = new List<Integer>();
             Integer currentAdd = 0;
             for(Integer i=start;i<=value/step;i++){
-                newArr.add(currentAdd);
-                currentAdd += step; 
+                if(currentAdd!=value){
+                    newArr.add(currentAdd);
+                    currentAdd += step; 
+                }
             }
             return newArr;
         }else{return null;}
